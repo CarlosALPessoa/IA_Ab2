@@ -3,4 +3,5 @@ Repositório destinado ao mini-projeto na disciplina de Inteligência Articial r
 
 Para execução correta do programa, é necessário ter o Python já instalado, e as bibliotecas numpy e scikit-fuzzy através do comando abaixo:
 pip install numpy
+
 pip install scikit-fuzzy
