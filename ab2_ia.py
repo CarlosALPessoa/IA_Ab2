@@ -7,6 +7,11 @@ import skfuzzy as fuzz
 from skfuzzy import control as ctrl
 
 # Cria as variáveis linguísticas
+'''
+Antecedent: Variáveis de entrada (sintomas) no sistema fuzzy.
+Consequent: Variável de saída (grau de pertinência do diagnóstico de diabetes).
+'''
+
 urina = ctrl.Antecedent(np.arange(0, 11, 1), 'urina')  # Urina excessivamente
 obesidade = ctrl.Antecedent(np.arange(0, 11, 1), 'obesidade')  # Obesidade central (adicionando uma pequena tolerância)
 formigamento = ctrl.Antecedent(np.arange(0, 11, 1), 'formigamento')  # Formingamento nos pés e nas mãos
@@ -16,12 +21,16 @@ tipo_diabetes = ctrl.Consequent(np.arange(0, 4, 1), 'tipo_diabetes')  # Tipo de 
 
 
 # Define as funções de pertinência (membership functions)
+"""
+trimf: Função de pertinência triangular.
+Definimos as funções de pertinência para cada variável linguística (baixa, moderada, alta).
+"""
 urina['baixa'] = fuzz.trimf(urina.universe, [0, 0, 5])
 urina['moderada'] = fuzz.trimf(urina.universe, [0, 5, 10])
 urina['alta'] = fuzz.trimf(urina.universe, [5, 10, 10])
 
-obesidade['baixa'] = fuzz.trimf(obesidade.universe, [0, 0, 5])  # Alteração aqui para evitar divisão por zero
-obesidade['moderada'] = fuzz.trimf(obesidade.universe, [0, 5, 10])  # Alteração aqui para evitar divisão por zero
+obesidade['baixa'] = fuzz.trimf(obesidade.universe, [0, 0, 5])  
+obesidade['moderada'] = fuzz.trimf(obesidade.universe, [0, 5, 10]) 
 obesidade['alta'] = fuzz.trimf(obesidade.universe, [5, 10, 10])
 
 formigamento['baixa'] = fuzz.trimf(formigamento.universe, [0, 0, 5])
@@ -41,6 +50,9 @@ tipo_diabetes['pre_diabetico'] = fuzz.trimf(tipo_diabetes.universe, [0, 1, 2])
 tipo_diabetes['diabetico_tipo2'] = fuzz.trimf(tipo_diabetes.universe, [1, 2, 3])
 
 # Regras fuzzy
+'''
+Definimos três regras fuzzy com base nos sintomas fornecidos.
+'''
 rule1 = ctrl.Rule(urina['alta'] & formigamento['alta'] |
                   obesidade['moderada'] & formigamento['alta'] |
                   urina['alta'] & obesidade['moderada'] & visao['moderada'] |
@@ -73,8 +85,12 @@ tipo_mapeado = {
 
 # Mostra o resultado
 print("Grau de pertinência do diagnóstico de diabetes:", diabetes_sim.output['diabetes'])
-tipo_resultado = tipo_mapeado[int(diabetes_sim.output['tipo_diabetes'])]
 print("Tipo de diabetes:", tipo_mapeado[int(diabetes_sim.output['tipo_diabetes'])])
+
+'''
+Pega o tipo de diabetes resultado 
+'''
+tipo_resultado = tipo_mapeado[int(diabetes_sim.output['tipo_diabetes'])]
 
 # Tratamento para pré-diabético e diabético tipo 2
 if tipo_resultado == 'pre_diabetico':
